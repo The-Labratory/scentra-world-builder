@@ -13,10 +13,10 @@ import { ifraRules } from "@/data/molecularData";
 const productCategories = ["fine_fragrance", "body_lotion", "candle", "soap", "shampoo", "deodorant"];
 
 export default function IFRARulesManager() {
-  const [rules, setRules] = useState<any[]>([]);
-  const [ingredients, setIngredients] = useState<any[]>([]);
+  const [rules, setRules] = useState<unknown[]>([]);
+  const [ingredients, setIngredients] = useState<unknown[]>([]);
   const [search, setSearch] = useState("");
-  const [editItem, setEditItem] = useState<any>(null);
+  const [editItem, setEditItem] = useState<unknown>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [seeding, setSeeding] = useState(false);
 
@@ -39,7 +39,7 @@ export default function IFRARulesManager() {
 
       const rows = [];
       for (const rule of ifraRules) {
-        const ing = allIngs.find((i: any) => i.name.toLowerCase().includes(rule.ingredientId.replace(/-/g, " ").toLowerCase()));
+        const ing = allIngs.find((i) => (i as Record<string, string>).name.toLowerCase().includes(rule.ingredientId.replace(/-/g, " ").toLowerCase()));
         if (ing) {
           rows.push({
             ingredient_id: ing.id,
@@ -56,7 +56,7 @@ export default function IFRARulesManager() {
         toast.success(`Seeded ${rows.length} rules`);
         load();
       }
-    } catch (e: any) {
+    } catch (e) {
       toast.error(e.message);
     } finally {
       setSeeding(false);
@@ -81,7 +81,7 @@ export default function IFRARulesManager() {
       toast.success("Saved");
       setDialogOpen(false);
       load();
-    } catch (e: any) {
+    } catch (e) {
       toast.error(e.message);
     }
   };

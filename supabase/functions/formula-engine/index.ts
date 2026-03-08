@@ -128,8 +128,8 @@ Deno.serve(async (req) => {
 
         const timePoints = [0, 0.5, 1, 2, 3, 4, 5, 6, 7, 8]; // hours
         const evolution = timePoints.map((t) => {
-          const notes = ingredients.map((fi: any) => {
-            const ing = fi.ingredient as any;
+          const notes = ingredients.map((fi) => {
+            const ing = fi.ingredient as Record<string, unknown>;
             const layer = fi.layer_override || ing.default_layer;
 
             // Volatility decay: higher volatility = faster decay
@@ -198,14 +198,14 @@ Deno.serve(async (req) => {
         const stabilityScore = Math.round((fourHourProjection / Math.max(initialProjection, 1)) * 100);
 
         // Update formula with evolution summary
-        const dominantPhases = evolution.reduce((acc: any, e) => {
+        const dominantPhases = evolution.reduce((acc: Record<string, number[]>, e) => {
           if (!acc[e.dominant_note]) acc[e.dominant_note] = [];
           acc[e.dominant_note].push(e.time_hours);
           return acc;
         }, {});
 
         const evolutionSummary = Object.entries(dominantPhases)
-          .map(([note, times]: [string, any]) => `${note}: ${times[0]}–${times[times.length - 1]}h`)
+          .map(([note, times]: [string, number[]]) => `${note}: ${times[0]}–${times[times.length - 1]}h`)
           .join(" → ");
 
         await supabase

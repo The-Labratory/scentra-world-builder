@@ -14,10 +14,10 @@ import { knownInteractions } from "@/data/molecularData";
 const interactionTypes = ["synergistic", "antagonistic", "enhancing", "neutral"];
 
 export default function InteractionsManager() {
-  const [interactions, setInteractions] = useState<any[]>([]);
-  const [ingredients, setIngredients] = useState<any[]>([]);
+  const [interactions, setInteractions] = useState<unknown[]>([]);
+  const [ingredients, setIngredients] = useState<unknown[]>([]);
   const [search, setSearch] = useState("");
-  const [editItem, setEditItem] = useState<any>(null);
+  const [editItem, setEditItem] = useState<unknown>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [seeding, setSeeding] = useState(false);
 
@@ -44,8 +44,8 @@ export default function InteractionsManager() {
       const rows = [];
       for (const ki of knownInteractions) {
         // Try to find ingredients by matching the molecular data id to ingredient names
-        const ingA = allIngs?.find((i: any) => i.name.toLowerCase().includes(ki.ingredientA.replace(/-/g, " ").toLowerCase()));
-        const ingB = allIngs?.find((i: any) => i.name.toLowerCase().includes(ki.ingredientB.replace(/-/g, " ").toLowerCase()));
+        const ingA = allIngs?.find((i) => (i as Record<string, string>).name.toLowerCase().includes(ki.ingredientA.replace(/-/g, " ").toLowerCase()));
+        const ingB = allIngs?.find((i) => (i as Record<string, string>).name.toLowerCase().includes(ki.ingredientB.replace(/-/g, " ").toLowerCase()));
         if (ingA && ingB) {
           rows.push({
             ingredient_a_id: ingA.id,
@@ -66,7 +66,7 @@ export default function InteractionsManager() {
       } else {
         toast.error("Seed ingredients first");
       }
-    } catch (e: any) {
+    } catch (e) {
       toast.error(e.message || "Seed failed");
     } finally {
       setSeeding(false);
@@ -94,7 +94,7 @@ export default function InteractionsManager() {
       toast.success("Saved");
       setDialogOpen(false);
       load();
-    } catch (e: any) {
+    } catch (e) {
       toast.error(e.message);
     }
   };
@@ -106,7 +106,7 @@ export default function InteractionsManager() {
     load();
   };
 
-  const typeColor = (t: string) => {
+  const typeColor = (t: string): "default" | "destructive" | "secondary" | "outline" => {
     if (t === "synergistic") return "default";
     if (t === "antagonistic") return "destructive";
     if (t === "enhancing") return "secondary";
@@ -149,7 +149,7 @@ export default function InteractionsManager() {
               <tr key={item.id} className="border-b border-border/10 hover:bg-muted/10">
                 <td className="px-4 py-3 text-foreground">{item.ingredient_a?.name}</td>
                 <td className="px-4 py-3 text-foreground">{item.ingredient_b?.name}</td>
-                <td className="px-4 py-3"><Badge variant={typeColor(item.interaction_type) as any} className="text-xs">{item.interaction_type}</Badge></td>
+                <td className="px-4 py-3"><Badge variant={typeColor(item.interaction_type)} className="text-xs">{item.interaction_type}</Badge></td>
                 <td className="px-4 py-3 font-mono text-xs">{item.interaction_strength}</td>
                 <td className="px-4 py-3 text-xs text-muted-foreground">{item.accord_name || "—"}</td>
                 <td className="px-4 py-3 text-right">

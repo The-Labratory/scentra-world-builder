@@ -98,7 +98,7 @@ const SEOPageGeneratorPage = () => {
         },
       });
       toast.success("SEO page generated!");
-    } catch (err: any) {
+    } catch (err) {
       // Fallback: generate locally
       const slug = keyword.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
       setGeneratedPage({

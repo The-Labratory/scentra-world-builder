@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 export default function SecurityEventsPage() {
-  const [events, setEvents] = useState<any[]>([]);
+  const [events, setEvents] = useState<unknown[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
 

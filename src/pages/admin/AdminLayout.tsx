@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Outlet, useNavigate, useLocation, Link } from "react-router-dom";
+import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, SidebarTrigger, Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 import { NavLink } from "@/components/NavLink";
@@ -26,7 +27,7 @@ const adminNav = [
 
 export default function AdminLayout() {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [authMode, setAuthMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
@@ -87,7 +88,7 @@ export default function AdminLayout() {
         if (error) throw error;
         toast.success("Signed in");
       }
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || "Authentication failed");
     } finally {
       setAuthLoading(false);

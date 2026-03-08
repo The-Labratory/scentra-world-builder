@@ -28,7 +28,7 @@ const ROLE_COLORS: Record<string, string> = {
 };
 
 export default function PermissionsPage() {
-  const [permissions, setPermissions] = useState<any[]>([]);
+  const [permissions, setPermissions] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterRole, setFilterRole] = useState<string>("all");
   const [showAdd, setShowAdd] = useState(false);
@@ -39,10 +39,10 @@ export default function PermissionsPage() {
 
   const loadPermissions = async () => {
     setLoading(true);
-    const { data, error } = await (supabase.from("system_permissions" as any) as any)
-      .select("*")
-      .order("role")
-      .order("permission");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const untypedDb = supabase as any;
+    const { data, error } = await untypedDb
+      .from("system_permissions")
     if (error) toast.error(error.message);
     setPermissions(data || []);
     setLoading(false);
@@ -58,7 +58,9 @@ export default function PermissionsPage() {
     if (!newPermission.trim()) { toast.error("Permission name required"); return; }
     setSaving(true);
     try {
-      const { error } = await (supabase.from("system_permissions" as any) as any).insert([{
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const untypedDb = supabase as any;
+      const { error } = await untypedDb.from("system_permissions").insert([{
         role: newRole,
         permission: newPermission.trim(),
         description: newDescription.trim() || null,
@@ -69,7 +71,7 @@ export default function PermissionsPage() {
       setNewPermission("");
       setNewDescription("");
       loadPermissions();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message);
     } finally {
       setSaving(false);
@@ -77,7 +79,9 @@ export default function PermissionsPage() {
   };
 
   const handleDelete = async (id: string) => {
-    const { error } = await (supabase.from("system_permissions" as any) as any).delete().eq("id", id);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const untypedDb = supabase as any;
+    const { error } = await untypedDb.from("system_permissions").delete().eq("id", id);
     if (error) { toast.error(error.message); return; }
     toast.success("Permission removed");
     loadPermissions();

@@ -41,7 +41,7 @@ export default function AgentsPage() {
   );
 
   const updateStatus = async (id: string, status: string) => {
-    const updates: any = { status };
+    const updates: Record<string, unknown> = { status };
     if (status === "active") updates.approved_at = new Date().toISOString();
     await supabase.from("affiliate_partners").update(updates).eq("id", id);
     toast.success(`Agent ${status}`);

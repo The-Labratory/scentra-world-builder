@@ -13,7 +13,7 @@ import { format } from "date-fns";
 export default function PartnerManager() {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [selected, setSelected] = useState<any>(null);
+  const [selected, setSelected] = useState<unknown>(null);
 
   const { data: applications = [], isLoading } = useQuery({
     queryKey: ["partner-applications"],

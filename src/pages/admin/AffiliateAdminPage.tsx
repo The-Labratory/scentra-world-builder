@@ -104,7 +104,7 @@ export default function AffiliateAdminPage() {
   };
 
   const handleStatusChange = async (id: string, newStatus: string) => {
-    const updates: any = { status: newStatus };
+    const updates: Record<string, unknown> = { status: newStatus };
     if (newStatus === "active") updates.approved_at = new Date().toISOString();
     const { error } = await supabase
       .from("affiliate_partners")

@@ -95,7 +95,7 @@ export default function IngredientsManager() {
       if (error) throw error;
       toast.success(`Seeded ${rows.length} ingredients`);
       load();
-    } catch (e: any) {
+    } catch (e) {
       toast.error(e.message || "Seed failed");
     } finally {
       setSeeding(false);
@@ -106,18 +106,18 @@ export default function IngredientsManager() {
     if (!editIng?.name) { toast.error("Name required"); return; }
     try {
       if (editIng.id) {
-        const { error } = await supabase.from("ingredients").update(editIng as any).eq("id", editIng.id);
+        const { error } = await supabase.from("ingredients").update(editIng as Record<string, unknown>).eq("id", editIng.id);
         if (error) throw error;
         toast.success("Updated");
       } else {
-        const { error } = await supabase.from("ingredients").insert(editIng as any);
+        const { error } = await supabase.from("ingredients").insert(editIng as Record<string, unknown>);
         if (error) throw error;
         toast.success("Created");
       }
       setDialogOpen(false);
       setEditIng(null);
       load();
-    } catch (e: any) {
+    } catch (e) {
       toast.error(e.message || "Save failed");
     }
   };

@@ -16,33 +16,35 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
 export default function ReferralManagementPage() {
-  const [relationships, setRelationships] = useState<any[]>([]);
-  const [invites, setInvites] = useState<any[]>([]);
-  const [fraudFlags, setFraudFlags] = useState<any[]>([]);
-  const [events, setEvents] = useState<any[]>([]);
-  const [commissionRules, setCommissionRules] = useState<any[]>([]);
-  const [rankRules, setRankRules] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const untypedDb = supabase as any;
+  const [relationships, setRelationships] = useState<unknown[]>([]);
+  const [invites, setInvites] = useState<unknown[]>([]);
+  const [fraudFlags, setFraudFlags] = useState<unknown[]>([]);
+  const [events, setEvents] = useState<unknown[]>([]);
+  const [commissionRules, setCommissionRules] = useState<unknown[]>([]);
+  const [rankRules, setRankRules] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
   // Reassign dialog
-  const [reassignRow, setReassignRow] = useState<any | null>(null);
+  const [reassignRow, setReassignRow] = useState<unknown>(null);
   const [newParentId, setNewParentId] = useState("");
   const [saving, setSaving] = useState(false);
 
   // Edit commission rule
-  const [editRule, setEditRule] = useState<any | null>(null);
-  const [editRank, setEditRank] = useState<any | null>(null);
+  const [editRule, setEditRule] = useState<unknown>(null);
+  const [editRank, setEditRank] = useState<unknown>(null);
 
   const loadAll = async () => {
     setLoading(true);
     const [relRes, invRes, flagsRes, eventsRes, rulesRes, ranksRes] = await Promise.all([
-      (supabase.from("referral_relationships" as any) as any).select("*").order("created_at", { ascending: false }).limit(200),
-      (supabase.from("referral_invites" as any) as any).select("*").order("created_at", { ascending: false }).limit(200),
-      (supabase.from("fraud_flags" as any) as any).select("*").order("created_at", { ascending: false }).limit(100),
-      (supabase.from("referral_events" as any) as any).select("*").order("created_at", { ascending: false }).limit(100),
-      (supabase.from("commission_rules" as any) as any).select("*").order("level"),
-      (supabase.from("rank_rules" as any) as any).select("*").order("rank_level"),
+      untypedDb.from("referral_relationships").select("*").order("created_at", { ascending: false }).limit(200),
+      untypedDb.from("referral_invites").select("*").order("created_at", { ascending: false }).limit(200),
+      untypedDb.from("fraud_flags").select("*").order("created_at", { ascending: false }).limit(100),
+      untypedDb.from("referral_events").select("*").order("created_at", { ascending: false }).limit(100),
+      untypedDb.from("commission_rules").select("*").order("level"),
+      untypedDb.from("rank_rules").select("*").order("rank_level"),
     ]);
     setRelationships(relRes.data || []);
     setInvites(invRes.data || []);
@@ -65,7 +67,7 @@ export default function ReferralManagementPage() {
         return;
       }
 
-      const { error } = await (supabase.from("referral_relationships" as any) as any)
+      const { error } = await untypedDb.from("referral_relationships")
         .update({ parent_user_id: newParentId.trim() })
         .eq("id", reassignRow.id);
       if (error) throw error;
@@ -83,7 +85,7 @@ export default function ReferralManagementPage() {
       setReassignRow(null);
       setNewParentId("");
       loadAll();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message);
     } finally {
       setSaving(false);
@@ -93,13 +95,13 @@ export default function ReferralManagementPage() {
   const handleReviewFlag = async (flagId: string, status: string) => {
     try {
       const userId = (await supabase.auth.getUser()).data.user?.id;
-      const { error } = await (supabase.from("fraud_flags" as any) as any)
+      const { error } = await untypedDb.from("fraud_flags")
         .update({ status, reviewed_by: userId, reviewed_at: new Date().toISOString() })
         .eq("id", flagId);
       if (error) throw error;
       toast.success(`Flag marked as ${status}`);
       loadAll();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message);
     }
   };
@@ -111,12 +113,12 @@ export default function ReferralManagementPage() {
       const { id, ...payload } = editRule;
       payload.updated_at = new Date().toISOString();
       payload.updated_by = (await supabase.auth.getUser()).data.user?.id;
-      const { error } = await (supabase.from("commission_rules" as any) as any).update(payload).eq("id", id);
+      const { error } = await untypedDb.from("commission_rules").update(payload).eq("id", id);
       if (error) throw error;
       toast.success("Commission rule updated");
       setEditRule(null);
       loadAll();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message);
     } finally {
       setSaving(false);
@@ -128,12 +130,12 @@ export default function ReferralManagementPage() {
     setSaving(true);
     try {
       const { id, ...payload } = editRank;
-      const { error } = await (supabase.from("rank_rules" as any) as any).update(payload).eq("id", id);
+      const { error } = await untypedDb.from("rank_rules").update(payload).eq("id", id);
       if (error) throw error;
       toast.success("Rank rule updated");
       setEditRank(null);
       loadAll();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message);
     } finally {
       setSaving(false);

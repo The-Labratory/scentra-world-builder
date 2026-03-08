@@ -8,8 +8,8 @@ interface DashboardStats {
   totalOrders: number;
   totalRevenue: number;
   totalSecurityEvents: number;
-  recentSecurityEvents: any[];
-  recentAuditLogs: any[];
+  recentSecurityEvents: unknown[];
+  recentAuditLogs: unknown[];
 }
 
 export default function SuperAdminDashboard() {

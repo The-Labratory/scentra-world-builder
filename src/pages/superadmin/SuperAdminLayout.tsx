@@ -40,7 +40,7 @@ export default function SuperAdminLayout() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       toast.success("Signed in");
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || "Authentication failed");
     } finally {
       setAuthLoading(false);

@@ -12,10 +12,10 @@ const BUCKETS = ["avatars", "email-assets", "employee-documents"];
 
 export default function StorageManagerPage() {
   const [bucket, setBucket] = useState(BUCKETS[0]);
-  const [files, setFiles] = useState<any[]>([]);
+  const [files, setFiles] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(false);
   const [path, setPath] = useState("");
-  const [deleteFile, setDeleteFile] = useState<any | null>(null);
+  const [deleteFile, setDeleteFile] = useState<unknown>(null);
   const [deleting, setDeleting] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -28,7 +28,7 @@ export default function StorageManagerPage() {
       });
       if (error) throw error;
       setFiles(data || []);
-    } catch (err: any) {
+    } catch (err) {
       toast.error(`Failed to load files: ${err.message}`);
       setFiles([]);
     } finally {
@@ -47,13 +47,13 @@ export default function StorageManagerPage() {
     setPath(prev => prev.split("/").slice(0, -1).join("/"));
   };
 
-  const handlePreview = (file: any) => {
+  const handlePreview = (file: Record<string, unknown>) => {
     const filePath = path ? `${path}/${file.name}` : file.name;
     const { data } = supabase.storage.from(bucket).getPublicUrl(filePath);
     setPreviewUrl(data.publicUrl);
   };
 
-  const handleDownload = async (file: any) => {
+  const handleDownload = async (file: Record<string, unknown>) => {
     const filePath = path ? `${path}/${file.name}` : file.name;
     const { data, error } = await supabase.storage.from(bucket).download(filePath);
     if (error) { toast.error(error.message); return; }
@@ -83,7 +83,7 @@ export default function StorageManagerPage() {
       toast.success("File deleted");
       setDeleteFile(null);
       loadFiles();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(`Delete failed: ${err.message}`);
     } finally {
       setDeleting(false);

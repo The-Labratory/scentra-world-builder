@@ -110,7 +110,7 @@ export default function EmployeeOnboardingPage() {
       setIdFile(null);
       setBankFile(null);
       loadRequests();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message);
     } finally {
       setLoading(false);

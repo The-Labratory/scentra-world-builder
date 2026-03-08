@@ -30,7 +30,7 @@ const PAGE_SIZE = 25;
 
 export default function DatabaseExplorerPage() {
   const [selectedTable, setSelectedTable] = useState<BrowsableTable>("profiles");
-  const [rows, setRows] = useState<any[]>([]);
+  const [rows, setRows] = useState<unknown[]>([]);
   const [columns, setColumns] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -38,23 +38,25 @@ export default function DatabaseExplorerPage() {
   const [totalCount, setTotalCount] = useState(0);
 
   // Edit/Create dialog
-  const [editRow, setEditRow] = useState<any | null>(null);
+  const [editRow, setEditRow] = useState<unknown>(null);
   const [editMode, setEditMode] = useState<"edit" | "create">("edit");
   const [editValues, setEditValues] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
 
   // Delete dialog
-  const [deleteRow, setDeleteRow] = useState<any | null>(null);
+  const [deleteRow, setDeleteRow] = useState<unknown>(null);
   const [deleting, setDeleting] = useState(false);
 
   const loadData = useCallback(async () => {
     setLoading(true);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const untypedDb = supabase as any;
     try {
-      const countRes = await (supabase.from(selectedTable as any) as any).select("*", { count: "exact", head: true });
+      const countRes = await untypedDb.from(selectedTable).select("*", { count: "exact", head: true });
       setTotalCount(countRes.count || 0);
 
-      const query = (supabase.from(selectedTable as any) as any)
-        .select("*")
+      const query = untypedDb
+        .from(selectedTable)
         .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1)
         .order("created_at", { ascending: false });
 
@@ -68,7 +70,7 @@ export default function DatabaseExplorerPage() {
       } else {
         setColumns([]);
       }
-    } catch (err: any) {
+    } catch (err) {
       toast.error(`Failed to load ${selectedTable}: ${err.message}`);
       setRows([]);
       setColumns([]);
@@ -84,7 +86,7 @@ export default function DatabaseExplorerPage() {
     ? rows.filter(row => JSON.stringify(row).toLowerCase().includes(searchQuery.toLowerCase()))
     : rows;
 
-  const handleEdit = (row: any) => {
+  const handleEdit = (row: unknown) => {
     setEditMode("edit");
     setEditRow(row);
     const values: Record<string, string> = {};
@@ -107,7 +109,7 @@ export default function DatabaseExplorerPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const payload: Record<string, any> = {};
+      const payload: Record<string, unknown> = {};
       for (const [key, val] of Object.entries(editValues)) {
         if (key === "id" && editMode === "edit") continue;
         if (val === "" || val === "null") { payload[key] = null; continue; }
@@ -116,17 +118,21 @@ export default function DatabaseExplorerPage() {
 
       if (editMode === "create") {
         delete payload.id;
-        const { error } = await (supabase.from(selectedTable as any) as any).insert([payload]);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const untypedDb = supabase as any;
+        const { error } = await untypedDb.from(selectedTable).insert([payload]);
         if (error) throw error;
         toast.success("Record created");
       } else {
-        const { error } = await (supabase.from(selectedTable as any) as any)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const untypedDb = supabase as any;
+        const { error } = await untypedDb
+          .from(selectedTable)
           .update(payload)
-          .eq("id", editRow.id);
+          .eq("id", (editRow as Record<string, unknown>).id);
         if (error) throw error;
         toast.success("Record updated");
       }
-
       // Log the action
       await supabase.from("admin_audit_logs").insert([{
         user_id: (await supabase.auth.getUser()).data.user?.id || "",
@@ -138,7 +144,7 @@ export default function DatabaseExplorerPage() {
 
       setEditRow(null);
       loadData();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(`Save failed: ${err.message}`);
     } finally {
       setSaving(false);
@@ -149,9 +155,10 @@ export default function DatabaseExplorerPage() {
     if (!deleteRow) return;
     setDeleting(true);
     try {
-      const { error } = await (supabase.from(selectedTable as any) as any)
-        .delete()
-        .eq("id", deleteRow.id);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const untypedDb = supabase as any;
+      const { error } = await untypedDb
+        .from(selectedTable)
       if (error) throw error;
 
       await supabase.from("admin_audit_logs").insert([{
@@ -165,14 +172,14 @@ export default function DatabaseExplorerPage() {
       toast.success("Record deleted");
       setDeleteRow(null);
       loadData();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(`Delete failed: ${err.message}`);
     } finally {
       setDeleting(false);
     }
   };
 
-  const truncateValue = (val: any) => {
+  const truncateValue = (val: unknown) => {
     const str = typeof val === "object" ? JSON.stringify(val) : String(val ?? "—");
     return str.length > 60 ? str.slice(0, 57) + "…" : str;
   };

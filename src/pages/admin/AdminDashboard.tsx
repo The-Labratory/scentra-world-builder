@@ -12,7 +12,7 @@ interface Stats {
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats>({ ingredients: 0, formulas: 0, interactions: 0, ifraRules: 0 });
-  const [recentFormulas, setRecentFormulas] = useState<any[]>([]);
+  const [recentFormulas, setRecentFormulas] = useState<unknown[]>([]);
 
   useEffect(() => {
     loadStats();

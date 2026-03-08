@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, ScrollText } from "lucide-react";
 
 export default function AuditLogPage() {
-  const [logs, setLogs] = useState<any[]>([]);
+  const [logs, setLogs] = useState<unknown[]>([]);
   const [search, setSearch] = useState("");
   const [entityFilter, setEntityFilter] = useState("all");
 
@@ -21,7 +21,7 @@ export default function AuditLogPage() {
 
   const filtered = logs.filter((l) => !search || l.action.includes(search) || l.entity_type.includes(search));
 
-  const actionColor = (a: string) => {
+  const actionColor = (a: string): "default" | "secondary" | "destructive" | "outline" => {
     if (a === "create") return "default";
     if (a === "update") return "secondary";
     if (a === "delete") return "destructive";
@@ -67,7 +67,7 @@ export default function AuditLogPage() {
             {filtered.map((log) => (
               <tr key={log.id} className="border-b border-border/10 hover:bg-muted/10">
                 <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{new Date(log.created_at).toLocaleString()}</td>
-                <td className="px-4 py-3"><Badge variant={actionColor(log.action) as any} className="text-xs">{log.action}</Badge></td>
+                <td className="px-4 py-3"><Badge variant={actionColor(log.action)} className="text-xs">{log.action}</Badge></td>
                 <td className="px-4 py-3 text-xs">{log.entity_type}</td>
                 <td className="px-4 py-3 text-xs font-mono text-muted-foreground">{log.user_id?.slice(0, 8)}...</td>
                 <td className="px-4 py-3 text-xs text-muted-foreground max-w-xs truncate">

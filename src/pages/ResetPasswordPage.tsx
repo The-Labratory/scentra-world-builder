@@ -47,7 +47,7 @@ export default function ResetPasswordPage() {
       if (error) throw error;
       toast.success("Password updated successfully!");
       navigate("/auth");
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message || "Failed to reset password");
     } finally {
       setLoading(false);

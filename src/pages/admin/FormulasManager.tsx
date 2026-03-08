@@ -9,11 +9,11 @@ import { Search, Eye, Trash2, CheckCircle, XCircle, Clock } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function FormulasManager() {
-  const [formulas, setFormulas] = useState<any[]>([]);
+  const [formulas, setFormulas] = useState<unknown[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [selectedFormula, setSelectedFormula] = useState<any>(null);
-  const [formulaIngredients, setFormulaIngredients] = useState<any[]>([]);
+  const [selectedFormula, setSelectedFormula] = useState<unknown>(null);
+  const [formulaIngredients, setFormulaIngredients] = useState<unknown[]>([]);
   const [detailOpen, setDetailOpen] = useState(false);
 
   const load = useCallback(async () => {
@@ -23,7 +23,7 @@ export default function FormulasManager() {
 
   useEffect(() => { load(); }, [load]);
 
-  const viewFormula = async (formula: any) => {
+  const viewFormula = async (formula: Record<string, unknown>) => {
     setSelectedFormula(formula);
     const { data } = await supabase.from("formula_ingredients").select("*, ingredient:ingredients(name, default_layer, functional_group)").eq("formula_id", formula.id);
     setFormulaIngredients(data || []);
@@ -137,7 +137,7 @@ export default function FormulasManager() {
                   <p className="text-xs text-muted-foreground">No ingredients</p>
                 ) : (
                   <div className="space-y-1">
-                    {formulaIngredients.map((fi: any) => (
+                    {formulaIngredients.map((fi) => (
                       <div key={fi.id} className="flex items-center justify-between p-2 rounded bg-muted/10 text-xs">
                         <span className="text-foreground">{fi.ingredient?.name}</span>
                         <div className="flex items-center gap-2">

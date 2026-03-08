@@ -92,7 +92,7 @@ export default function EmployeeRequestsPage() {
         status: "approved",
         approved_by: user.id,
         approved_at: new Date().toISOString(),
-        assigned_role: assignedRole as any,
+        assigned_role: assignedRole as string,
         assigned_department_id: assignedDept || null,
       }).eq("id", selectedRequest.id);
       if (error) throw error;
@@ -120,7 +120,7 @@ export default function EmployeeRequestsPage() {
       toast.success(`Approved ${selectedRequest.full_name} — employee record created`);
       setDialogOpen(false);
       loadData();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message);
     } finally {
       setLoading(false);
@@ -147,7 +147,7 @@ export default function EmployeeRequestsPage() {
       toast.success(`Rejected request for ${selectedRequest.full_name}`);
       setDialogOpen(false);
       loadData();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(err.message);
     } finally {
       setLoading(false);

@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 interface SystemSetting {
   id: string;
   key: string;
-  value: any;
+  value: unknown;
   category: string;
   description: string | null;
   updated_at: string;
@@ -36,7 +36,7 @@ export default function SystemSettingsPage() {
 
   const addSetting = async () => {
     if (!newKey.trim()) return toast.error("Key required");
-    let parsedValue: any;
+    let parsedValue: unknown;
     try { parsedValue = JSON.parse(newValue); } catch { parsedValue = newValue; }
     const { error } = await supabase.from("system_settings").insert({
       key: newKey.trim(),
@@ -51,7 +51,7 @@ export default function SystemSettingsPage() {
   };
 
   const updateSetting = async (id: string, value: string) => {
-    let parsed: any;
+    let parsed: unknown;
     try { parsed = JSON.parse(value); } catch { parsed = value; }
     const { error } = await supabase.from("system_settings").update({ value: parsed }).eq("id", id);
     if (error) return toast.error(error.message);
