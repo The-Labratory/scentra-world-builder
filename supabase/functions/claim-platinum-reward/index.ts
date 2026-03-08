@@ -74,7 +74,7 @@ Deno.serve(async (req) => {
     // Create discount code on Shopify
     const shopifyToken = Deno.env.get("SHOPIFY_ACCESS_TOKEN")!;
     const shopifyRes = await fetch(
-      `https://lenzo-hariri-2.myshopify.com/admin/api/2025-01/price_rules/${PRICE_RULE_ID}/discount_codes.json`,
+      `https://lenzo-hariri-2.myshopify.com/admin/api/2025-07/price_rules/${PRICE_RULE_ID}/discount_codes.json`,
       {
         method: "POST",
         headers: {
