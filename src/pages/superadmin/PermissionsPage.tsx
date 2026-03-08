@@ -46,6 +46,7 @@ export default function PermissionsPage() {
       .select("*")
       .order("role")
       .order("permission");
+    if (error) { toast.error(error.message); setLoading(false); return; }
     setPermissions(data || []);
     setLoading(false);
   };
