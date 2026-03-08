@@ -119,33 +119,42 @@ export function modelEvaporationCurve(ingredients: FormulaIngredient[]): Evapora
   const totalMinutes = 480; // 8 hours
   const step = 30;
 
+  // Compute once — used to normalise every time-point to 0-100
+  const maxPossible =
+    ingredients.reduce((s, fi) => s + fi.concentrationPct * fi.ingredient.odorIntensity, 0) || 1;
+
+  // Pre-compute per-ingredient constants that do not change across time points
+  const ingParams = ingredients.map((fi) => {
+    const ing = fi.ingredient;
+    return {
+      ing,
+      layer: fi.layerOverride || ing.defaultLayer,
+      decayRate: (ing.vaporPressure * ing.volatilityIndex) / 500,
+      fixativeBonus: ing.isFixative ? 0.6 : 1.0,
+      baseIntensity: fi.concentrationPct * ing.odorIntensity,
+    };
+  });
+
   for (let t = 0; t <= totalMinutes; t += step) {
     let topI = 0, heartI = 0, baseI = 0;
     let bestNote = "", bestIntensity = 0;
 
-    for (const fi of ingredients) {
-      const ing = fi.ingredient;
-      const layer = fi.layerOverride || ing.defaultLayer;
-      
-      // Exponential decay based on vapor pressure and volatility
-      const decayRate = (ing.vaporPressure * ing.volatilityIndex) / 500;
-      const fixativeBonus = ing.isFixative ? 0.6 : 1.0;
-      const intensity = fi.concentrationPct * ing.odorIntensity * Math.exp(-decayRate * fixativeBonus * (t / 60));
-      
-      const currentIntensity = Math.max(0, intensity);
-      
-      if (layer === "top") topI += currentIntensity;
-      else if (layer === "heart") heartI += currentIntensity;
+    for (const p of ingParams) {
+      const currentIntensity = Math.max(
+        0,
+        p.baseIntensity * Math.exp(-p.decayRate * p.fixativeBonus * (t / 60)),
+      );
+
+      if (p.layer === "top") topI += currentIntensity;
+      else if (p.layer === "heart") heartI += currentIntensity;
       else baseI += currentIntensity;
 
       if (currentIntensity > bestIntensity) {
         bestIntensity = currentIntensity;
-        bestNote = ing.name;
+        bestNote = p.ing.name;
       }
     }
 
-    // Normalize to 0-100 scale
-    const maxPossible = ingredients.reduce((s, fi) => s + fi.concentrationPct * fi.ingredient.odorIntensity, 0) || 1;
     const norm = (v: number) => Math.min(100, Math.round((v / maxPossible) * 100));
 
     const normTop = norm(topI);

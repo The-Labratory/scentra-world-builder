@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Beaker, AlertTriangle, CheckCircle, XCircle, FlaskConical, Sparkles, TrendingUp, ShieldCheck, Clock, ChevronDown, Search, Plus, Minus, Info } from "lucide-react";
 import { molecularIngredients, type MolecularIngredient } from "@/data/molecularData";
@@ -16,6 +16,9 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Lege
 
 const concentrationTypes = ["Cologne", "EDT", "EDP", "Parfum"] as const;
 
+// Stable object reference — avoids Recharts re-rendering the Legend on every render
+const CHART_LEGEND_STYLE = { fontSize: 10 } as const;
+
 const FormulationLabPage = () => {
   const [formulaName, setFormulaName] = useState("Untitled Formula");
   const [concType, setConcType] = useState<string>("EDP");
@@ -27,21 +30,27 @@ const FormulationLabPage = () => {
   const [aiLoading, setAiLoading] = useState(false);
 
   const filteredIngredients = useMemo(() => {
+    const q = search.toLowerCase();
     return molecularIngredients.filter((ing) => {
-      const matchesSearch = ing.name.toLowerCase().includes(search.toLowerCase()) || ing.functionalGroup.toLowerCase().includes(search.toLowerCase());
+      const matchesSearch = ing.name.toLowerCase().includes(q) || ing.functionalGroup.toLowerCase().includes(q);
       const matchesLayer = layerFilter === "all" || ing.defaultLayer === layerFilter;
       return matchesSearch && matchesLayer;
     });
   }, [search, layerFilter]);
 
+  // Stable ref so addIngredient can read current state without becoming a
+  // dependency of its own useCallback (which would recreate it on every change)
+  const selectedIngredientsRef = useRef<FormulaIngredient[]>([]);
+  selectedIngredientsRef.current = selectedIngredients;
+
   const addIngredient = useCallback((ing: MolecularIngredient) => {
-    if (selectedIngredients.find((si) => si.ingredient.id === ing.id)) {
+    if (selectedIngredientsRef.current.find((si) => si.ingredient.id === ing.id)) {
       toast.error("Already in formula");
       return;
     }
     setSelectedIngredients((prev) => [...prev, { ingredient: ing, concentrationPct: 5 }]);
     setReport(null);
-  }, [selectedIngredients]);
+  }, []);
 
   const removeIngredient = (id: string) => {
     setSelectedIngredients((prev) => prev.filter((si) => si.ingredient.id !== id));
@@ -93,6 +102,26 @@ const FormulationLabPage = () => {
     if (layer === "heart") return "hsl(var(--secondary))";
     return "hsl(var(--accent))";
   };
+
+  // Memoize pairwise compatibility so it is not recomputed on every render
+  const pairwiseCompatibility = useMemo(() => {
+    const pairs: { key: string; aName: string; bName: string; score: number; variant: "default" | "secondary" | "destructive" }[] = [];
+    for (let i = 0; i < selectedIngredients.length; i++) {
+      for (let j = i + 1; j < selectedIngredients.length; j++) {
+        const a = selectedIngredients[i];
+        const b = selectedIngredients[j];
+        const c = calculateCompatibility(a.ingredient, b.ingredient);
+        pairs.push({
+          key: `${a.ingredient.id}-${b.ingredient.id}`,
+          aName: a.ingredient.name,
+          bName: b.ingredient.name,
+          score: c.score,
+          variant: c.score >= 70 ? "default" : c.score >= 40 ? "secondary" : "destructive",
+        });
+      }
+    }
+    return pairs;
+  }, [selectedIngredients]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -223,19 +252,14 @@ const FormulationLabPage = () => {
                   <TrendingUp className="w-4 h-4 text-primary" /> Pairwise Compatibility
                 </h3>
                 <div className="space-y-1.5 max-h-48 overflow-y-auto">
-                  {selectedIngredients.map((a, i) =>
-                    selectedIngredients.slice(i + 1).map((b) => {
-                      const c = calculateCompatibility(a.ingredient, b.ingredient);
-                      return (
-                        <div key={`${a.ingredient.id}-${b.ingredient.id}`} className="flex items-center justify-between text-xs p-2 rounded bg-muted/20">
-                          <span className="text-foreground truncate flex-1">{a.ingredient.name} × {b.ingredient.name}</span>
-                          <Badge variant={c.score >= 70 ? "default" : c.score >= 40 ? "secondary" : "destructive"} className="text-[10px] ml-2">
-                            {c.score}/100
-                          </Badge>
-                        </div>
-                      );
-                    })
-                  )}
+                  {pairwiseCompatibility.map((pair) => (
+                    <div key={pair.key} className="flex items-center justify-between text-xs p-2 rounded bg-muted/20">
+                      <span className="text-foreground truncate flex-1">{pair.aName} × {pair.bName}</span>
+                      <Badge variant={pair.variant} className="text-[10px] ml-2">
+                        {pair.score}/100
+                      </Badge>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
@@ -294,7 +318,7 @@ const FormulationLabPage = () => {
                         <Area type="monotone" dataKey="topIntensity" stackId="1" stroke="hsl(var(--primary))" fill="hsl(var(--primary) / 0.3)" name="Top" />
                         <Area type="monotone" dataKey="heartIntensity" stackId="1" stroke="hsl(var(--secondary))" fill="hsl(var(--secondary) / 0.3)" name="Heart" />
                         <Area type="monotone" dataKey="baseIntensity" stackId="1" stroke="hsl(var(--accent))" fill="hsl(var(--accent) / 0.3)" name="Base" />
-                        <Legend wrapperStyle={{ fontSize: 10 }} />
+                        <Legend wrapperStyle={CHART_LEGEND_STYLE} />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>

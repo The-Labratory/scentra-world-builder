@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
@@ -82,6 +82,18 @@ const statusBadge = (status: string) => {
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
+// Cache duration: 5 minutes. Prevents redundant network round-trips when the
+// admin switches back to a tab they already visited within the same session.
+const TAB_CACHE_TTL = 5 * 60 * 1000;
+
+// Typed cache so each tab's cached data retains full type information
+type TabCache = {
+  partner_apps: { data: PartnerApp[]; ts: number } | undefined;
+  waitlist:     { data: WaitlistEntry[]; ts: number } | undefined;
+  blends:       { data: BlendStat[]; ts: number } | undefined;
+  employees:    { data: Employee[]; ts: number } | undefined;
+};
+
 const AdminPage = () => {
   const { user, isAdmin, isSuperAdmin, signOut, loading } = useAuth();
   const navigate = useNavigate();
@@ -94,6 +106,14 @@ const AdminPage = () => {
   const [dataLoading, setDataLoading] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
 
+  // In-memory cache keyed by tab name
+  const cache = useRef<TabCache>({
+    partner_apps: undefined,
+    waitlist:     undefined,
+    blends:       undefined,
+    employees:    undefined,
+  });
+
   // Redirect if not at least admin
   useEffect(() => {
     if (!loading && !isAdmin) navigate("/", { replace: true });
@@ -103,36 +123,64 @@ const AdminPage = () => {
     setDataLoading(true);
     try {
       if (t === "partner_apps") {
+        const cached = cache.current.partner_apps;
+        if (cached && Date.now() - cached.ts < TAB_CACHE_TTL) {
+          setPartnerApps(cached.data);
+          return;
+        }
         const { data, error } = await supabase
           .from("partner_applications")
           .select("*")
           .order("created_at", { ascending: false })
           .limit(100);
         if (error) throw error;
-        setPartnerApps((data as PartnerApp[]) ?? []);
+        const rows = (data as PartnerApp[]) ?? [];
+        cache.current.partner_apps = { data: rows, ts: Date.now() };
+        setPartnerApps(rows);
 
       } else if (t === "waitlist") {
+        const cached = cache.current.waitlist;
+        if (cached && Date.now() - cached.ts < TAB_CACHE_TTL) {
+          setWaitlist(cached.data);
+          return;
+        }
         const { data, error } = await supabase
           .from("waitlist")
           .select("*")
           .order("position", { ascending: true })
           .limit(200);
         if (error) throw error;
-        setWaitlist((data as WaitlistEntry[]) ?? []);
+        const rows = (data as WaitlistEntry[]) ?? [];
+        cache.current.waitlist = { data: rows, ts: Date.now() };
+        setWaitlist(rows);
 
       } else if (t === "blends") {
-        const data = await supabase.rpc("get_alltime_leaderboard", { _limit: 50 });
-        if (data.error) throw data.error;
-        setBlends((data.data as BlendStat[]) ?? []);
+        const cached = cache.current.blends;
+        if (cached && Date.now() - cached.ts < TAB_CACHE_TTL) {
+          setBlends(cached.data);
+          return;
+        }
+        const res = await supabase.rpc("get_alltime_leaderboard", { _limit: 50 });
+        if (res.error) throw res.error;
+        const rows = (res.data as BlendStat[]) ?? [];
+        cache.current.blends = { data: rows, ts: Date.now() };
+        setBlends(rows);
 
       } else if (t === "employees") {
+        const cached = cache.current.employees;
+        if (cached && Date.now() - cached.ts < TAB_CACHE_TTL) {
+          setEmployees(cached.data);
+          return;
+        }
         const { data, error } = await supabase
           .from("employees")
           .select("*")
           .order("created_at", { ascending: false })
           .limit(100);
         if (error) throw error;
-        setEmployees((data as Employee[]) ?? []);
+        const rows = (data as Employee[]) ?? [];
+        cache.current.employees = { data: rows, ts: Date.now() };
+        setEmployees(rows);
       }
     } catch (e) {
       toast.error("Failed to load data.");

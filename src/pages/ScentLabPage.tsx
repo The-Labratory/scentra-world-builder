@@ -63,7 +63,10 @@ const ScentLabPage = () => {
   const noteColors = useMemo(() => selected.map((s) => s.color), [selected]);
   const fillPercent = volume / MAX_VOLUME;
 
-  const notesForLayer = availableNotes.filter((n) => n.layer === activeLayer);
+  const notesForLayer = useMemo(
+    () => availableNotes.filter((n) => n.layer === activeLayer),
+    [activeLayer],
+  );
 
   return (
     <div className="min-h-screen bg-background">
