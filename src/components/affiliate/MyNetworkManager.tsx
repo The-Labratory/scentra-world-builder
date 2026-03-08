@@ -130,8 +130,8 @@ function AgentForm({
         toast.success("Agent added to your network");
       }
       onSave();
-    } catch (err: any) {
-      toast.error(err.message || "Failed to save");
+    } catch (err) {
+      toast.error((err as Error).message || "Failed to save");
     } finally {
       setSaving(false);
     }
@@ -207,8 +207,8 @@ function NetworkNode({
       if (error) throw error;
       toast.success(`${node.name} removed from network`);
       onRefresh();
-    } catch (err: any) {
-      toast.error(err.message || "Failed to remove");
+    } catch (err) {
+      toast.error((err as Error).message || "Failed to remove");
     } finally {
       setDeleting(false);
     }

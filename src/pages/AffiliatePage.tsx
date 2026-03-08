@@ -17,6 +17,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useRealtimeSaleNotifications } from "@/hooks/useRealtimeSaleNotifications";
+import type { User } from "@supabase/supabase-js";
+import type { Tables } from "@/integrations/supabase/types";
 
 const TIERS = [
   { name: "B2C Partner", code: "b2c", commission: "50%", requirement: "Direct consumer sales", color: "from-primary to-accent", icon: Crown },
@@ -32,14 +34,14 @@ const HOW_IT_WORKS = [
 
 const AffiliatePage = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
-  const [affiliate, setAffiliate] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [affiliate, setAffiliate] = useState<Tables<"affiliate_partners"> | null>(null);
   const [loading, setLoading] = useState(true);
   const [applying, setApplying] = useState(false);
   const [copied, setCopied] = useState(false);
   const [tab, setTab] = useState<"overview" | "my-network" | "network" | "earnings" | "referrals" | "my-sales" | "payouts">("overview");
-  const [referrals, setReferrals] = useState<any[]>([]);
-  const [salesData, setSalesData] = useState<any[]>([]);
+  const [referrals, setReferrals] = useState<unknown[]>([]);
+  const [salesData, setSalesData] = useState<unknown[]>([]);
 
   // Real-time sale notifications with sound
   useRealtimeSaleNotifications(affiliate?.id || null);
@@ -103,8 +105,8 @@ const AffiliatePage = () => {
       if (error) throw error;
       setAffiliate(data);
       toast.success("Welcome to the Affiliate Program!", { description: "Your referral link is ready." });
-    } catch (err: any) {
-      if (err.message?.includes("duplicate")) {
+    } catch (err) {
+      if ((err as Error).message?.includes("duplicate")) {
         toast.error("You already have an affiliate account.");
       } else {
         toast.error("Something went wrong. Please try again.");

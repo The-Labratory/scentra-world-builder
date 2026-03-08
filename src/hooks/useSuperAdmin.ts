@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { AppRole } from "@/lib/policyEngine";
+import type { User } from "@supabase/supabase-js";
 
 export function useSuperAdmin() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [roles, setRoles] = useState<AppRole[]>([]);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -62,9 +63,9 @@ export function useSuperAdmin() {
         severity: "medium",
         user_id: user?.id,
         endpoint: window.location.pathname,
-        details: details as any,
+        details: details as Record<string, unknown>,
       }]);
-    } catch {}
+    } catch { /* intentional */ }
   };
 
   return { user, roles, isSuperAdmin, loading, logSecurityEvent };

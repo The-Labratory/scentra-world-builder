@@ -22,7 +22,7 @@ function loadLocalProgress(): GameProgress {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) return JSON.parse(saved);
-  } catch {}
+  } catch { /* empty */ }
   return { xp: 0, completedChallenges: {}, currentChapter: 1 };
 }
 

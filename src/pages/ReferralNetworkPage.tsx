@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -76,21 +77,21 @@ function TreeNodeCard({ node, level = 0 }: { node: TreeNode; level?: number }) {
 export default function ReferralNetworkPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<unknown>(null);
   const [copied, setCopied] = useState(false);
 
   // Network data
-  const [myRelationship, setMyRelationship] = useState<any>(null);
-  const [inviterProfile, setInviterProfile] = useState<any>(null);
+  const [myRelationship, setMyRelationship] = useState<unknown>(null);
+  const [inviterProfile, setInviterProfile] = useState<unknown>(null);
   const [directReferrals, setDirectReferrals] = useState<TreeNode[]>([]);
   const [totalDownline, setTotalDownline] = useState(0);
   const [treeData, setTreeData] = useState<TreeNode[]>([]);
-  const [invites, setInvites] = useState<any[]>([]);
-  const [rankHistory, setRankHistory] = useState<any[]>([]);
-  const [commissions, setCommissions] = useState<any[]>([]);
-  const [ranks, setRanks] = useState<any[]>([]);
+  const [invites, setInvites] = useState<unknown[]>([]);
+  const [rankHistory, setRankHistory] = useState<unknown[]>([]);
+  const [commissions, setCommissions] = useState<unknown[]>([]);
+  const [ranks, setRanks] = useState<unknown[]>([]);
 
   // Invite dialog
   const [showInvite, setShowInvite] = useState(false);
@@ -129,7 +130,7 @@ export default function ReferralNetworkPage() {
         _referral_code: code,
       });
       if (error) throw error;
-      const result = data as any;
+      const result = data as { success?: boolean; error?: string };
       if (result?.success) {
         toast.success("You've been linked to your inviter's network!");
         await loadAllData(userId);
@@ -138,7 +139,7 @@ export default function ReferralNetworkPage() {
       } else if (result?.error) {
         toast.error(result.error);
       }
-    } catch (err: any) {
+    } catch (err) {
       console.error("Referral processing error:", err);
     }
   };
@@ -146,21 +147,23 @@ export default function ReferralNetworkPage() {
   const loadAllData = async (userId: string) => {
     setLoading(true);
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const untypedDb = supabase as any;
       const [profileRes, downlineRes, directCountRes, invitesRes, rankHistRes, commissionsRes, ranksRes] = await Promise.all([
         supabase.from("profiles").select("*").eq("user_id", userId).maybeSingle(),
         supabase.rpc("get_downline", { _user_id: userId }),
         supabase.rpc("count_direct_referrals", { _user_id: userId }),
-        (supabase.from("referral_invites" as any) as any).select("*").eq("inviter_user_id", userId).order("created_at", { ascending: false }).limit(50),
-        (supabase.from("user_rank_history" as any) as any).select("*").eq("user_id", userId).order("achieved_at", { ascending: false }),
-        (supabase.from("commission_ledger" as any) as any).select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(50),
-        (supabase.from("rank_rules" as any) as any).select("*").eq("is_active", true).order("rank_level", { ascending: true }),
+        untypedDb.from("referral_invites").select("*").eq("inviter_user_id", userId).order("created_at", { ascending: false }).limit(50),
+        untypedDb.from("user_rank_history").select("*").eq("user_id", userId).order("achieved_at", { ascending: false }),
+        untypedDb.from("commission_ledger").select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(50),
+        untypedDb.from("rank_rules").select("*").eq("is_active", true).order("rank_level", { ascending: true }),
       ]);
 
       // Fetch relationship separately with type cast
-      const relRes = await (supabase.from("referral_relationships" as any) as any).select("*").eq("user_id", userId).maybeSingle();
+      const relRes = await untypedDb.from("referral_relationships").select("*").eq("user_id", userId).maybeSingle();
 
       setProfile(profileRes.data);
-      const relData = relRes.data as any;
+      const relData = relRes.data as { parent_user_id?: string } | null;
       setMyRelationship(relData);
 
       // Load inviter profile if exists
@@ -215,13 +218,15 @@ export default function ReferralNetworkPage() {
         return;
       }
 
-      const { error } = await (supabase.from("referral_invites" as any) as any).insert([{
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const untypedDb = supabase as any;
+      const { error } = await untypedDb.from("referral_invites").insert([{
         inviter_user_id: user.id,
         invited_email: inviteEmail.trim().toLowerCase(),
       }]);
       if (error) throw error;
 
-      await (supabase.from("referral_events" as any) as any).insert([{
+      await untypedDb.from("referral_events").insert([{
         user_id: user.id,
         event_type: "invite_sent",
         details: { invited_email: inviteEmail.trim().toLowerCase() },
@@ -231,8 +236,8 @@ export default function ReferralNetworkPage() {
       setInviteEmail("");
       setShowInvite(false);
       loadAllData(user.id);
-    } catch (err: any) {
-      toast.error(err.message || "Failed to send invite");
+    } catch (err) {
+      toast.error((err as Error).message || "Failed to send invite");
     } finally {
       setSendingInvite(false);
     }

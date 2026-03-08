@@ -29,7 +29,7 @@ const AffiliateSignupPage = () => {
   const [step, setStep] = useState<"form" | "success">("form");
   const [submitting, setSubmitting] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [affiliateData, setAffiliateData] = useState<any>(null);
+  const [affiliateData, setAffiliateData] = useState<unknown>(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -122,8 +122,8 @@ const AffiliateSignupPage = () => {
         setAffiliateData(data);
         setStep("success");
       }
-    } catch (err: any) {
-      toast.error(err.message || "Something went wrong. Please try again.");
+    } catch (err) {
+      toast.error((err as Error).message || "Something went wrong. Please try again.");
     } finally {
       setSubmitting(false);
     }

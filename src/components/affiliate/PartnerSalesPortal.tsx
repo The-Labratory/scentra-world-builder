@@ -16,7 +16,7 @@ interface PartnerSalesPortalProps {
 }
 
 export default function PartnerSalesPortal({ affiliatePartnerId, userId }: PartnerSalesPortalProps) {
-  const [reports, setReports] = useState<any[]>([]);
+  const [reports, setReports] = useState<unknown[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [form, setForm] = useState({
@@ -67,8 +67,8 @@ export default function PartnerSalesPortal({ affiliatePartnerId, userId }: Partn
       setDialogOpen(false);
       setForm({ product_name: "", quantity: 1, sale_amount: 0, customer_name: "", customer_email: "", sale_date: new Date().toISOString().split("T")[0], notes: "" });
       loadReports();
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err) {
+      toast.error((err as Error).message);
     } finally {
       setSubmitting(false);
     }
