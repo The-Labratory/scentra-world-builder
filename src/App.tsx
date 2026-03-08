@@ -5,27 +5,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useCartSync } from "@/hooks/useCartSync";
 import { lazy, Suspense } from "react";
-import GatewayPage from "./pages/GatewayPage";
-import Index from "./pages/Index";
-import OnboardingPage from "./pages/OnboardingPage";
-import WorldsPage from "./pages/WorldsPage";
-import ScentLabPage from "./pages/ScentLabPage";
-import StorePage from "./pages/StorePage";
-import ProductPage from "./pages/ProductPage";
-import WorldDetailPage from "./pages/WorldDetailPage";
-import CollectionPage from "./pages/CollectionPage";
-import ScentDNAPage from "./pages/ScentDNAPage";
-import GiftingPage from "./pages/GiftingPage";
-import GiftRevealPage from "./pages/GiftRevealPage";
-import InstallPage from "./pages/InstallPage";
-import PartnerPage from "./pages/PartnerPage";
-import ExclusiveAccessPage from "./pages/ExclusiveAccessPage";
-import LaunchPage from "./pages/LaunchPage";
-import SharePage from "./pages/SharePage";
-import MilestonesPage from "./pages/MilestonesPage";
-import NotFound from "./pages/NotFound";
 
-// Lazy load pages
+/* Lazy load pages - use lazy for all pages to avoid duplicate imports */
+const GatewayPage = lazy(() => import("./pages/GatewayPage"));
+const Index = lazy(() => import("./pages/Index"));
 const OnboardingPage = lazy(() => import("./pages/OnboardingPage"));
 const WorldsPage = lazy(() => import("./pages/WorldsPage"));
 const ScentLabPage = lazy(() => import("./pages/ScentLabPage"));
@@ -53,7 +36,7 @@ const AffiliateStarterPackPage = lazy(() => import("./pages/AffiliateStarterPack
 const CreatorPortalPage = lazy(() => import("./pages/CreatorPortalPage"));
 const SEOPageGeneratorPage = lazy(() => import("./pages/SEOPageGeneratorPage"));
 
-// Admin
+/* Admin */
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const IngredientsManager = lazy(() => import("./pages/admin/IngredientsManager"));
@@ -69,7 +52,7 @@ const AffiliateAdminPage = lazy(() => import("./pages/admin/AffiliateAdminPage")
 const TeamPage = lazy(() => import("./pages/TeamPage"));
 const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
 
-// Super Admin
+/* Super Admin */
 const SuperAdminLayout = lazy(() => import("./pages/superadmin/SuperAdminLayout"));
 const SuperAdminDashboard = lazy(() => import("./pages/superadmin/SuperAdminDashboard"));
 const SACustomersPage = lazy(() => import("./pages/superadmin/CustomersPage"));
@@ -163,26 +146,6 @@ const AppContent = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/onboarding" element={<OnboardingPage />} />
-      <Route path="/worlds" element={<WorldsPage />} />
-      <Route path="/worlds/:worldId" element={<WorldDetailPage />} />
-      <Route path="/lab" element={<ScentLabPage />} />
-      <Route path="/collection" element={<CollectionPage />} />
-      <Route path="/dna" element={<ScentDNAPage />} />
-      <Route path="/gifting" element={<GiftingPage />} />
-      <Route path="/gift/:shareCode" element={<GiftRevealPage />} />
-      <Route path="/store" element={<StorePage />} />
-      <Route path="/product/:handle" element={<ProductPage />} />
-      <Route path="/install" element={<InstallPage />} />
-      <Route path="/access" element={<ExclusiveAccessPage />} />
-      <Route path="/launch" element={<LaunchPage />} />
-      <Route path="/share" element={<SharePage />} />
-      <Route path="/partner" element={<PartnerPage />} />
-      <Route path="/milestones" element={<MilestonesPage />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
   );
 };
 
