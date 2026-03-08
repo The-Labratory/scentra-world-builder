@@ -43,7 +43,9 @@ export default function PermissionsPage() {
     const untypedDb = supabase as any;
     const { data, error } = await untypedDb
       .from("system_permissions")
-    if (error) toast.error(error.message);
+      .select("*")
+      .order("role")
+      .order("permission");
     setPermissions(data || []);
     setLoading(false);
   };

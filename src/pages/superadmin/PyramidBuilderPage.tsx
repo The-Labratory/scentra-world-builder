@@ -454,7 +454,13 @@ export default function PyramidBuilderPage() {
                   <button
                     key={c.id}
                     onClick={() => {
-                      setCurrent({ ...c as PyramidConfig, config: (c as PyramidConfig).config as { levels: PyramidLevel[] }, colors: (c as PyramidConfig).colors as { background: string; text: string; accent: string }, visibility_rules: (c as PyramidConfig).visibility_rules as { roles: string[] } });
+                      const cfg = c as PyramidConfig;
+                      setCurrent({
+                        ...cfg,
+                        config: cfg.config as { levels: PyramidLevel[] },
+                        colors: cfg.colors as { background: string; text: string; accent: string },
+                        visibility_rules: cfg.visibility_rules as { roles: string[] },
+                      });
                       loadVersions(c.id);
                     }}
                     className={`w-full text-left p-2 rounded-lg text-sm transition-colors ${c.id === current.id ? "bg-primary/10 text-primary" : "hover:bg-muted/20 text-muted-foreground"}`}

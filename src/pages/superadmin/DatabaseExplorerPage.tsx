@@ -57,6 +57,7 @@ export default function DatabaseExplorerPage() {
 
       const query = untypedDb
         .from(selectedTable)
+        .select("*")
         .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1)
         .order("created_at", { ascending: false });
 
@@ -159,6 +160,8 @@ export default function DatabaseExplorerPage() {
       const untypedDb = supabase as any;
       const { error } = await untypedDb
         .from(selectedTable)
+        .delete()
+        .eq("id", (deleteRow as Record<string, unknown>).id);
       if (error) throw error;
 
       await supabase.from("admin_audit_logs").insert([{
