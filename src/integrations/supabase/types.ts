@@ -65,6 +65,39 @@ export type Database = {
           title: string | null
           updated_at: string
           user_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          department?: string | null
+          email: string
+          hired_at?: string | null
+          id?: string
+          name: string
+          rejection_note?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string
+          hired_at?: string | null
+          id?: string
+          name?: string
+          rejection_note?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       admin_audit_logs: {
         Row: {
           action: string
@@ -2343,13 +2376,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      register_referral: {
-        Args: { _referral_code: string; _referee_user_id: string; _referee_email: string }
-        Returns: Json
-      }
-    }
-    Enums: {
-      app_role: "admin" | "superadmin" | "user"
       is_super_admin: { Args: { _user_id: string }; Returns: boolean }
       lock_formula_version: { Args: { _formula_id: string }; Returns: Json }
       log_security_event: {
@@ -2370,6 +2396,10 @@ export type Database = {
         Args: { _new_user_id: string; _referral_code: string }
         Returns: Json
       }
+      register_referral: {
+        Args: { _referral_code: string; _referee_user_id: string; _referee_email: string }
+        Returns: Json
+      }
       validate_formula: { Args: { _formula_id: string }; Returns: Json }
     }
     Enums: {
@@ -2380,6 +2410,7 @@ export type Database = {
         | "team_admin"
         | "agent"
         | "viewer"
+        | "superadmin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2507,15 +2538,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "superadmin", "user"],
-      app_role: [
-        "admin",
-        "user",
-        "super_admin",
-        "team_admin",
-        "agent",
-        "viewer",
-      ],
+      app_role: ["admin", "user", "super_admin", "team_admin", "agent", "viewer", "superadmin"],
     },
   },
 } as const
