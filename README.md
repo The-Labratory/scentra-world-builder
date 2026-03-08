@@ -88,6 +88,65 @@ Changes made via Lovable will be committed automatically to this repo.
 - Select the "Codespaces" tab
 - Click on "New codespace" to launch a new Codespace environment
 
+## 🌸 New to Programming? Understanding the Tech Stack
+
+Think of this app as a real perfume laboratory. Every great lab has three things: **recipes** for the formulas, a **storage room** for ingredients, and **equipment** that puts it all together. The code in this repository works the same way — here's a plain-English tour.
+
+---
+
+### The Three "Languages" at Work
+
+#### 🧴 TypeScript — 94.9% of the code (The Recipe Cards)
+
+Imagine every perfume formula written on a very precise recipe card. The card doesn't just say "add some rose oil" — it says *exactly* how many milliliters of which grade of rose oil to use, and it refuses to let you substitute water for oil by mistake.
+
+That's **TypeScript**. It is the main language of this app. Almost everything you see on screen — buttons, pages, forms, shopping carts — is written in TypeScript. It builds on top of a simpler language called **JavaScript** (the language browsers understand natively) by adding *type safety*: a set of rules that catch mistakes early, before a bad formula ever reaches a customer.
+
+> **Analogy:** A master perfumer labels every bottle in the lab. TypeScript is the labelling system — if you reach for a bottle labelled "citrus top note" and try to pour it into a slot marked "fixative", it will stop you with a clear error message.
+
+---
+
+#### 🗄️ PLpgSQL — 4.5% of the code (The Ingredient Vault Rulebook)
+
+Every lab needs a secure storeroom where ingredients are kept, catalogued, and dispensed safely. In this app the storeroom is a **database** (powered by Supabase). The database holds things like user accounts, saved scent blends, orders, and ingredient details.
+
+**PLpgSQL** (short for *Procedural Language/PostgreSQL*) is the language used to write the *rules* inside that storeroom. Rules like: "Only the person who saved this blend can read it back" or "When a new user signs up, create their profile automatically."
+
+> **Analogy:** Think of the storeroom manager's instruction manual. The shelves themselves are the database; PLpgSQL is the written procedures on the wall that tell the manager how to handle every situation — who is allowed in, what to do when stock runs low, and how to log every transaction.
+
+---
+
+#### 🎨 Other — 0.6% of the code (The Lab's Look and Feel)
+
+This small slice covers things like **HTML** (the skeleton of every web page — like the glass bottles and display shelves) and **CSS** (the styling — like the gold labels, the colour palette, and the elegant fonts). You also find configuration files here that tell the building tools how to package everything up for shipment.
+
+---
+
+### How It All Fits Together
+
+| Layer | Analogy | Language / Tool |
+|---|---|---|
+| What you see on screen | The display counter and testing strips | TypeScript + React |
+| How it looks | Bottle labels, colour palette, fonts | Tailwind CSS |
+| Where your data lives | The ingredient vault | Supabase (PostgreSQL) |
+| Vault rules & security | The storeroom manager's handbook | PLpgSQL |
+| How it's packaged & shipped | The delivery crate | Vite + GitHub Actions |
+
+---
+
+### The Bigger Picture
+
+When you open the app and blend a new scent:
+
+1. **TypeScript** runs in your browser and shows you the interactive lab interface.
+2. When you save your blend, TypeScript sends it to the **Supabase** database.
+3. **PLpgSQL** rules inside the database make sure only *you* can see your private formulas.
+4. Everything is packaged by **Vite** (a build tool — think of it as the machine that seals and labels the final product) and delivered through a web browser.
+
+That's the whole loop — from your fingertips to the vault and back again, all in a fraction of a second.
+
+---
+
 ## 🧪 Technologies
 
 This project is built with:
