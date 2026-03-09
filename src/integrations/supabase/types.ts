@@ -65,6 +65,39 @@ export type Database = {
           title: string | null
           updated_at: string
           user_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          department?: string | null
+          email: string
+          hired_at?: string | null
+          id?: string
+          name: string
+          rejection_note?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          department?: string | null
+          email?: string
+          hired_at?: string | null
+          id?: string
+          name?: string
+          rejection_note?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       admin_audit_logs: {
         Row: {
           action: string
@@ -2372,15 +2405,6 @@ export type Database = {
       }
       validate_formula: { Args: { _formula_id: string }; Returns: Json }
     }
-    Enums: {
-      app_role:
-        | "admin"
-        | "user"
-        | "super_admin"
-        | "team_admin"
-        | "agent"
-        | "viewer"
-    }
     CompositeTypes: {
       [_ in never]: never
     }
@@ -2508,14 +2532,6 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "superadmin", "user"],
-      app_role: [
-        "admin",
-        "user",
-        "super_admin",
-        "team_admin",
-        "agent",
-        "viewer",
-      ],
     },
   },
 } as const
