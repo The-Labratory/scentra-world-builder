@@ -1,9 +1,3 @@
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import {
-  Camera, Video, FileText, MessageSquare, BookOpen,
-  Download, ArrowRight, Sparkles, Instagram, Play
-} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import ParticleField from "@/components/ParticleField";
 import { Button } from "@/components/ui/button";

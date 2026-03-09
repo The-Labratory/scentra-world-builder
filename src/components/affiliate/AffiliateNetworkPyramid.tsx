@@ -13,6 +13,7 @@ import ConfettiBurst from "./ConfettiBurst";
 import { playCelebrationChime } from "./celebrationSound";
 import MonthlyLeaderboard from "./MonthlyLeaderboard";
 import lenzoAvatar from "@/assets/lenzo-avatar.png";
+import { getHighestRank } from "@/lib/rankUtils";
 import maherAvatar from "@/assets/maher-alia-avatar.jpg";
 
 // Map known names to local avatar assets
@@ -62,10 +63,7 @@ const RANKS = [
 ];
 
 function getRank(totalSales: number) {
-  let rank = RANKS[0];
-  for (const r of RANKS) {
-    if (totalSales >= r.minSales) rank = r;
-  }
+  const rank = getHighestRank(RANKS, totalSales);
   const nextRank = RANKS[RANKS.indexOf(rank) + 1];
   return { ...rank, nextRank };
 }

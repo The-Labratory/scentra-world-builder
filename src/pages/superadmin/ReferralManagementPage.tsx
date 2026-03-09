@@ -1,9 +1,3 @@
-import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import {
-  Users, Search, Pencil, Trash2, AlertTriangle, ChevronRight, ChevronDown,
-  Shield, Crown, ArrowRight, RefreshCw, Flag
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";

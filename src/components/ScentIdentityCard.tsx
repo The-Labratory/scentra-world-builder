@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion } from "framer-motion";
 import { Share2, Download, Crown, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { getPerfumerRank } from "@/lib/rankUtils";
 
 interface Props {
   blendNumber: number;
@@ -12,17 +13,9 @@ interface Props {
   className?: string;
 }
 
-const getRank = (score: number, blendCount?: number): { title: string; tier: string } => {
-  if (score >= 95) return { title: "Grand Perfumer", tier: "LEGENDARY" };
-  if (score >= 85) return { title: "Master Alchemist", tier: "MASTER" };
-  if (score >= 70) return { title: "Scent Architect", tier: "EXPERT" };
-  if (score >= 50) return { title: "Essence Weaver", tier: "ADEPT" };
-  return { title: "Apprentice Nose", tier: "NOVICE" };
-};
-
 const ScentIdentityCard = ({ blendNumber, blendName, harmonyScore, noteEmojis, concentration, className = "" }: Props) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const rank = getRank(harmonyScore);
+  const rank = getPerfumerRank(harmonyScore);
   const formattedNumber = String(blendNumber).padStart(4, "0");
 
   const shareCard = async () => {

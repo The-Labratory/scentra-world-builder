@@ -11,15 +11,10 @@ import { toast } from "sonner";
 import { useProgression } from "@/hooks/useProgression";
 import Navbar from "@/components/Navbar";
 import ParticleField from "@/components/ParticleField";
+import { getPerfumerRank } from "@/lib/rankUtils";
 
 /* ── Rank system ── */
-const getRank = (score: number) => {
-  if (score >= 95) return { title: "Grand Perfumer", tier: "LEGENDARY", color: "text-accent" };
-  if (score >= 85) return { title: "Master Alchemist", tier: "MASTER", color: "text-primary" };
-  if (score >= 70) return { title: "Scent Architect", tier: "EXPERT", color: "text-primary" };
-  if (score >= 50) return { title: "Essence Weaver", tier: "ADEPT", color: "text-muted-foreground" };
-  return { title: "Apprentice Nose", tier: "NOVICE", color: "text-muted-foreground" };
-};
+const getRank = getPerfumerRank;
 
 /* ── Status triggers — rotating FOMO ── */
 const statusTriggers = [

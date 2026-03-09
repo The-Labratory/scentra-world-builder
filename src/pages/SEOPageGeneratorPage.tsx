@@ -1,9 +1,3 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import {
-  Search, Sparkles, FileText, ArrowRight, Globe, TrendingUp,
-  Wand2, CheckCircle, ExternalLink
-} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import ParticleField from "@/components/ParticleField";
 import { Button } from "@/components/ui/button";

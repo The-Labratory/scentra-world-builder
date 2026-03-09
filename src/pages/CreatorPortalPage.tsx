@@ -1,11 +1,3 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import {
-  Video, MessageSquare, Camera, Package, HelpCircle, Mail,
-  ArrowRight, Sparkles, BookOpen, Play, Download, ChevronDown,
-  Send, FileText
-} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import ParticleField from "@/components/ParticleField";
 import { Button } from "@/components/ui/button";

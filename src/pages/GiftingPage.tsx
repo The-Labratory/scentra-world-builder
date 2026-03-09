@@ -1,24 +1,3 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Gift, Sparkles, Loader2, ArrowLeft, Users, User, BookHeart, Star } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import ParticleField from "@/components/ParticleField";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { z } from "zod";
-
-const GiftBlendSchema = z.object({
-  blendName: z.string(),
-  story: z.string(),
-  notes: z.array(z.object({
-    name: z.string(),
-    emoji: z.string().optional(),
-    layer: z.string(),
-  })).optional().default([]),
-  mood: z.string().optional().default(""),
-  intensity: z.string().optional().default(""),
-  scentLetter: z.string().optional(),
-});
 import GiftResult from "@/components/gifting/GiftResult";
 import PersonalityStep from "@/components/gifting/PersonalityStep";
 import OccasionStep from "@/components/gifting/OccasionStep";

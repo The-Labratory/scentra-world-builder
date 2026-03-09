@@ -1,10 +1,3 @@
-import { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import {
-  Crown, Users, GitBranch, Send, Trash2, RefreshCw,
-  LogOut, ChevronRight, Clock, Shield,
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { supabase } from "@/integrations/supabase/client";
