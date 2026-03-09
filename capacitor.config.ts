@@ -1,11 +1,11 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.846da16517e44e6f834561e06595b72d',
+  appId: 'app.lovable.3462940e03ac78c2b79c4d308228503d',
   appName: 'The Perfume Lab',
   webDir: 'dist',
   server: {
-    url: 'https://846da165-17e4-4e6f-8345-61e06595b72d.lovableproject.com?forceHideBadge=true',
+    url: 'https://3462940e-03ac-78c2-b79c-4d308228503d.lovableproject.com?forceHideBadge=true',
     cleartext: true,
   },
 };
