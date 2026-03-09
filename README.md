@@ -30,7 +30,7 @@ See the "Development" section below.
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**URL**: https://lovable.dev/projects/3462940e03ac78c2b79c4d308228503d
 
 ## 🛠️ Development
 
@@ -71,7 +71,7 @@ The build output will be in the `dist/` directory.
 
 **Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Simply visit the [Lovable Project](https://lovable.dev/projects/3462940e03ac78c2b79c4d308228503d) and start prompting.
 
 Changes made via Lovable will be committed automatically to this repo.
 
@@ -113,7 +113,7 @@ This project uses GitHub Actions for automated builds and deployments:
 
 **Via Lovable:**
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share → Publish.
+Simply open [Lovable](https://lovable.dev/projects/3462940e03ac78c2b79c4d308228503d) and click on Share → Publish.
 
 **Via GitHub Pages:**
 
