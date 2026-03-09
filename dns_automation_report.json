@@ -1,0 +1,14 @@
+{
+  "domain": "theperfumelab.org",
+  "ionos_prefix": "86c6352fa4744b2e874926ba4413659e",
+  "records_added": [],
+  "ionos_changes_response_summary": "GET https://api.ionos.com/dns/v1/domains blocked by environment proxy (CONNECT 403 Forbidden), so no authenticated IONOS API operations could be completed.",
+  "dns_propagation": false,
+  "lovable_reconnect_status": "requires_org_owner",
+  "lovable_clone_url": null,
+  "site_test": {
+    "http_status": null,
+    "tls_issuer": "Other"
+  },
+  "notes": "Used IONOS API credentials, but outbound HTTPS to api.ionos.com is blocked in this environment by proxy policy (CONNECT 403). Could not validate account, update records, or run Lovable recover actions. Last DNS observations: theperfumelab.org A -> [98.84.224.111, 18.208.88.157], www.theperfumelab.org A -> [185.158.133.1], _lovable TXT -> [], _lovable.www TXT -> []. Owner action required: Please install/authorize the Lovable GitHub App for the organization \"The-Labratory\" and grant it access to repository \"scentra-world-builder\" (Read & Write + Actions/Secrets). The app is required to sync the project and recover the domain. If our org uses SAML/third-party app approval, please approve Lovable under Organization → Settings → Third-party access."
+}
