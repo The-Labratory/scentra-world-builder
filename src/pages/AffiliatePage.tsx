@@ -1,10 +1,3 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Users, Link2, Copy, CheckCircle, TrendingUp, DollarSign,
-  Award, ArrowRight, Share2, BarChart3, Gift, Zap, Crown,
-  ShieldCheck, Wallet, UserPlus, MessageCircle, Mail, Twitter, Triangle
-} from "lucide-react";
 import AffiliatePyramidChart from "@/components/affiliate/AffiliatePyramidChart";
 import AffiliateNetworkPyramid from "@/components/affiliate/AffiliateNetworkPyramid";
 import MyNetworkManager from "@/components/affiliate/MyNetworkManager";

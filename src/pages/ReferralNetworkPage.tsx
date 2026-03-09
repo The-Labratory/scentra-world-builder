@@ -1,12 +1,3 @@
-import { useState, useEffect, useCallback } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Users, Link2, Copy, CheckCircle, TrendingUp, UserPlus, Share2,
-  ChevronRight, ChevronDown, Crown, Award, Shield, ArrowUp,
-  Gift, Zap, BarChart3
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";

@@ -1,9 +1,3 @@
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import {
-  Crown, DollarSign, Gift, Users, TrendingUp, Star,
-  Sparkles, ArrowRight, ShieldCheck, Zap, Package, CheckCircle
-} from "lucide-react";
 import Navbar from "@/components/Navbar";
 import ParticleField from "@/components/ParticleField";
 import { Button } from "@/components/ui/button";

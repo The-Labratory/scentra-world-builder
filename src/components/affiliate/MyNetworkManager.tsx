@@ -7,6 +7,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { getHighestRank } from "@/lib/rankUtils";
 
 interface PyramidNode {
   id: string;
@@ -33,11 +34,7 @@ const RANKS = [
 ];
 
 function getRank(totalSales: number) {
-  let rank = RANKS[0];
-  for (const r of RANKS) {
-    if (totalSales >= r.minSales) rank = r;
-  }
-  return rank;
+  return getHighestRank(RANKS, totalSales);
 }
 
 function buildSubTree(nodes: PyramidNode[], rootId: string): PyramidNode | null {
