@@ -15,7 +15,7 @@ Create GitHub App (“lovable-agent”) in the org
 
 Name: lovable-agent (or lovable.bot)
 
-Homepage URL: https://theperfumelab.de (or your org site)
+Homepage URL: https://theperfumelab.shop (or your org site)
 
 Callback URL: none required for App-to-App (leave blank) unless you plan OAuth. If required, set callback to your service URL.
 

@@ -1,7 +1,7 @@
 {
   "repository": "The-Labratory/scentra-world-builder",
-  "domain": "theperfumelab.de",
-  "timestamp_utc": "2026-03-08T17:56:00Z",
+  "domain": "theperfumelab.shop",
+  "timestamp_utc": "2026-03-09T21:41:00Z",
   "actions": [
     {
       "step": "A_prechecks_repository_and_permissions",
