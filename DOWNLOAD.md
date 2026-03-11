@@ -4,7 +4,7 @@ Welcome! Here's how to get started with The Perfume Lab app.
 
 ## 🌐 Easiest Way: Use the Live Web App
 
-**Just click this link:** [https://lawrencehariri.github.io/scentra-world-builder](https://lawrencehariri.github.io/scentra-world-builder)
+**Just click this link:** [https://the-labratory.github.io/scentra-world-builder](https://the-labratory.github.io/scentra-world-builder)
 
 No download needed! The app runs directly in your web browser.
 
@@ -15,7 +15,7 @@ No download needed! The app runs directly in your web browser.
 Want to run the app on your computer without internet? Follow these steps:
 
 ### Step 1: Download the App
-1. Go to the [Releases page](https://github.com/LawrenceHariri/scentra-world-builder/releases)
+1. Go to the [Releases page](https://github.com/The-Labratory/scentra-world-builder/releases)
 2. Click on the latest release
 3. Download the `scentra-world-builder.zip` file
 
@@ -72,13 +72,13 @@ For the best experience, run the app with a local server:
 - Make sure JavaScript is enabled in your browser
 
 **Need help?**
-- Open an issue on the [GitHub repository](https://github.com/LawrenceHariri/scentra-world-builder/issues)
+- Open an issue on the [GitHub repository](https://github.com/The-Labratory/scentra-world-builder/issues)
 
 ---
 
 ## 🔄 Updating to the Latest Version
 
-1. Download the latest release from the [Releases page](https://github.com/LawrenceHariri/scentra-world-builder/releases)
+1. Download the latest release from the [Releases page](https://github.com/The-Labratory/scentra-world-builder/releases)
 2. Extract the new version
 3. Replace your old folder with the new one
 

@@ -4,8 +4,15 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
 
+// Repo name used as the base path when deploying to GitHub Pages.
+// Override with VITE_BASE_PATH env variable if the repository is ever renamed.
+const REPO_NAME = "scentra-world-builder";
+const isGitHubActions = process.env.GITHUB_ACTIONS === "true";
+const BASE_PATH = process.env.VITE_BASE_PATH ?? (isGitHubActions ? `/${REPO_NAME}/` : "/");
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  base: BASE_PATH,
   server: {
     host: "::",
     port: 8080,
@@ -31,8 +38,8 @@ export default defineConfig(({ mode }) => ({
         background_color: "#0a0a0f",
         display: "standalone",
         orientation: "portrait",
-        start_url: "/",
-        scope: "/",
+        start_url: BASE_PATH,
+        scope: BASE_PATH,
         icons: [
           {
             src: "/pwa-192x192.png",
