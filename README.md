@@ -5,10 +5,10 @@ A fragrance atelier where you can craft your signature scent, explore fragrance 
 ## 🚀 Download and Run the App
 
 ### Option 1: Use the Live Web App (Easiest)
-Visit the deployed app at: **[https://lawrencehariri.github.io/scentra-world-builder](https://lawrencehariri.github.io/scentra-world-builder)**
+Visit the deployed app at: **[https://the-labratory.github.io/scentra-world-builder](https://the-labratory.github.io/scentra-world-builder)**
 
 ### Option 2: Download Pre-Built Release
-1. Go to the [Releases page](https://github.com/LawrenceHariri/scentra-world-builder/releases)
+1. Go to the [Releases page](https://github.com/The-Labratory/scentra-world-builder/releases)
 2. Download the latest `scentra-world-builder.zip`
 3. Extract the zip file to your computer
 4. Open `index.html` in your web browser
@@ -41,7 +41,7 @@ See the "Development" section below.
 
 ```sh
 # Clone the repository
-git clone https://github.com/LawrenceHariri/scentra-world-builder.git
+git clone https://github.com/The-Labratory/scentra-world-builder.git
 
 # Navigate to the project directory
 cd scentra-world-builder

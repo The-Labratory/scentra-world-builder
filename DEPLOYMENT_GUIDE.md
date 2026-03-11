@@ -37,7 +37,7 @@ This implementation enables automatic building, deployment, and distribution of 
 Users can now access the app in three ways:
 
 1. **Live Web App** (Easiest)
-   - URL: https://lawrencehariri.github.io/scentra-world-builder
+   - URL: https://the-labratory.github.io/scentra-world-builder
    - No download needed
    - Automatically updated when code is pushed to main
 
